@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
+import Dialog from "./Dialog";
 import { get, getDatabase, ref } from "firebase/database";
 import firebaseConfig from "../firebaseConfig";
 
@@ -13,6 +14,7 @@ const Form = () => {
   const [districts, setDistricts] = useState([]);
   const [district, setDistrict] = useState("");
   const [tds, setTds] = useState(0);
+  const [dialog, setDialog] = useState(false);
   const getStates = () => {
     const stateRef = ref(db, "state");
     get(stateRef)
@@ -76,13 +78,17 @@ const Form = () => {
   };
   return (
     <main className="main">
-      <h1>
-        {tds
-          ? ` TDS value is ${tds} which is ${getQuality(
-              tds
-            )} and you should use ${getPurifier(tds)}`
-          : "Lets check water of your area is really a drinking water."}
-      </h1>
+      {tds ? (
+        <h1>
+          TDS value is <span style={{ color: "Highlight" }}>{tds}</span> which
+          is <span style={{ color: "tomato" }}>{getQuality(tds)}</span> and you
+          should use{" "}
+          <span style={{ color: "yellowgreen" }}>{getPurifier(tds)}</span>
+        </h1>
+      ) : (
+        <h1>Lets check water of your area is really a drinking water.</h1>
+      )}
+
       <div className="main-container">
         <div className="form-container">
           <div className="state-container">
@@ -106,14 +112,14 @@ const Form = () => {
             </div>
           </div>
           <div className="district-container">
-            <label for="district">Enter Your District : </label>
+            <label for="district">Enter Your Area : </label>
             <div>
               <select
                 name="districts"
                 id="district"
                 onChange={(event) => setDistrict(event.target.value)}
               >
-                <option value="">Select District</option>
+                <option value="">Select Area</option>
                 {districts.map((item) => {
                   return (
                     <option value={item} key={item}>
@@ -137,6 +143,16 @@ const Form = () => {
           />
         </div>
       </div>
+      <button
+        onClick={() => {
+          setDialog(true);
+        }}
+        style={{ backgroundColor: "InfoBackground", border: "none" }}
+      >
+        Wanna submit a new reading?
+      </button>
+
+      {dialog && <Dialog setDialog={setDialog} />}
     </main>
   );
 };
