@@ -17,7 +17,7 @@ Submission for HackVerse 3.0 . It tells user if water is drinkable based on user
 
 - ReactJS
 - FireBase
-- AlanAI
+
 
 ## Installation:
 
